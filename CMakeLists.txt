@@ -6,7 +6,7 @@ project(desk_timer C CXX ASM)
 stm32_fetch_cmsis(G0)
 stm32_fetch_hal(G0)
 
-find_package(CMSIS COMPONENTS STM32G030F6 REQUIRED)
+find_package(CMSIS COMPONENTS STM32G0B1CB REQUIRED)
 find_package(HAL COMPONENTS STM32G0 REQUIRED)
 
 # This sets -g3 for debug builds, which includes DWARF GDB macros for memory mapped registers
@@ -22,19 +22,43 @@ file(GLOB_RECURSE PROJECT_SOURCES_CXX ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx)
 
 add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES_C} ${PROJECT_SOURCES_CXX})
 target_link_libraries(${CMAKE_PROJECT_NAME}
-        CMSIS::STM32::G030F6
-        STM32::NoSys
-        HAL::STM32::G0::RCC
-        HAL::STM32::G0::GPIO
-        HAL::STM32::G0::CORTEX
-        HAL::STM32::G0::SPI
-        HAL::STM32::G0::PWREx
+    CMSIS::STM32::G0B1CB
+    STM32::NoSys
+    HAL::STM32::G0::RCC
+    HAL::STM32::G0::RCCEx
+    HAL::STM32::G0::RTC
+    HAL::STM32::G0::RTCEx
+    HAL::STM32::G0::GPIO
+    HAL::STM32::G0::CORTEX
+    HAL::STM32::G0::SPI
+    HAL::STM32::G0::TIM
+    HAL::STM32::G0::PWREx
+    HAL::STM32::G0::UART
+    HAL::STM32::G0::UARTEx
 )
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/sys)
-stm32_print_size_of_target(${CMAKE_PROJECT_NAME})
+stm32_generate_binary_file(${CMAKE_PROJECT_NAME})
 
+# Show total flash and ram usage after build
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-	COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.bin
+	COMMAND ${CMAKE_SIZE} --format=sysv $<TARGET_FILE:${CMAKE_PROJECT_NAME}> | python ${CMAKE_CURRENT_SOURCE_DIR}/scripts/stats.py --mem-usage --color --newline --flash-size=131072 --ram-size=147456
 )
 
+# Custom target to show detailed memory usage per symbol
+find_program(CMAKE_NM NAMES ${STM32_TARGET_TRIPLET}-nm HINTS ${TOOLCHAIN_BIN_PATH})
+add_custom_target(symbol_summary
+    COMMAND ${CMAKE_NM} $<TARGET_FILE:${CMAKE_PROJECT_NAME}> -S --radix=d --size-sort --reverse-sort --format=sysv | python ${CMAKE_CURRENT_SOURCE_DIR}/scripts/stats.py --sym-size
+)
+
+# Target that starts the openocd server for debugging via stlink
+add_custom_target(openocd_server
+    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/debug/start_openocd.sh
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/debug
+)
+
+# Target that starts gdb connected to the openocd server
+add_custom_target(gdb
+    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/debug/start_gdb.sh
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/debug
+)
