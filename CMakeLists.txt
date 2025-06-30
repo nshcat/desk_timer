@@ -62,3 +62,8 @@ add_custom_target(gdb
     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/debug/start_gdb.sh
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/debug
 )
+
+# Target that flashes the microcontroller via connected ST-LINKV2.1
+add_custom_target(flash
+    COMMAND st-flash write ${CMAKE_PROJECT_NAME}.bin 0x08000000
+)

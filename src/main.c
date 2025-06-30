@@ -107,6 +107,10 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
+    HAL_Delay(1500);
+
+    HAL_GPIO_TogglePin(TEST_LED_GPIO_Port, TEST_LED_Pin);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -372,6 +376,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_STATUS_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : TEST_LED_Pin */
+  GPIO_InitStruct.Pin = TEST_LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(TEST_LED_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : KEY_3_Pin */
   GPIO_InitStruct.Pin = KEY_3_Pin;
