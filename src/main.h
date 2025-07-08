@@ -49,6 +49,8 @@ extern "C" {
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -59,20 +61,27 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define KEY_2_Pin GPIO_PIN_13
 #define KEY_2_GPIO_Port GPIOC
+#define KEY_2_EXTI_IRQn EXTI4_15_IRQn
 #define LED_STATUS_Pin GPIO_PIN_0
 #define LED_STATUS_GPIO_Port GPIOA
 #define KEY_3_Pin GPIO_PIN_7
 #define KEY_3_GPIO_Port GPIOC
+#define KEY_3_EXTI_IRQn EXTI4_15_IRQn
 #define JOY_PRESS_Pin GPIO_PIN_15
 #define JOY_PRESS_GPIO_Port GPIOA
+#define JOY_PRESS_EXTI_IRQn EXTI4_15_IRQn
 #define JOY_RIGHT_Pin GPIO_PIN_0
 #define JOY_RIGHT_GPIO_Port GPIOD
+#define JOY_RIGHT_EXTI_IRQn EXTI0_1_IRQn
 #define JOY_LEFT_Pin GPIO_PIN_1
 #define JOY_LEFT_GPIO_Port GPIOD
+#define JOY_LEFT_EXTI_IRQn EXTI0_1_IRQn
 #define JOY_DOWN_Pin GPIO_PIN_2
 #define JOY_DOWN_GPIO_Port GPIOD
+#define JOY_DOWN_EXTI_IRQn EXTI2_3_IRQn
 #define JOY_UP_Pin GPIO_PIN_3
 #define JOY_UP_GPIO_Port GPIOD
+#define JOY_UP_EXTI_IRQn EXTI2_3_IRQn
 #define OLED_SCK_Pin GPIO_PIN_3
 #define OLED_SCK_GPIO_Port GPIOB
 #define OLED_MISO_Pin GPIO_PIN_4
@@ -81,15 +90,13 @@ void Error_Handler(void);
 #define OLED_MOSI_GPIO_Port GPIOB
 #define KEY_1_Pin GPIO_PIN_6
 #define KEY_1_GPIO_Port GPIOB
+#define KEY_1_EXTI_IRQn EXTI4_15_IRQn
 #define OLED_RES_Pin GPIO_PIN_7
 #define OLED_RES_GPIO_Port GPIOB
 #define OLED_DS_Pin GPIO_PIN_8
 #define OLED_DS_GPIO_Port GPIOB
 #define OLED_CS_Pin GPIO_PIN_9
 #define OLED_CS_GPIO_Port GPIOB
-
-#define TEST_LED_Pin GPIO_PIN_6
-#define TEST_LED_GPIO_Port GPIOC
 
 /* USER CODE BEGIN Private defines */
 

@@ -32,12 +32,14 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     HAL::STM32::G0::CORTEX
     HAL::STM32::G0::SPI
     HAL::STM32::G0::TIM
+    HAL::STM32::G0::TIMEx
     HAL::STM32::G0::PWREx
     HAL::STM32::G0::UART
     HAL::STM32::G0::UARTEx
 )
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/sys)
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/hal)
 stm32_generate_binary_file(${CMAKE_PROJECT_NAME})
 
 # Show total flash and ram usage after build
