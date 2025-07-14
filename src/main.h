@@ -64,6 +64,8 @@ void Error_Handler(void);
 #define KEY_2_EXTI_IRQn EXTI4_15_IRQn
 #define LED_STATUS_Pin GPIO_PIN_0
 #define LED_STATUS_GPIO_Port GPIOA
+#define LED_STATUS2_Pin GPIO_PIN_6
+#define LED_STATUS2_GPIO_Port GPIOC
 #define KEY_3_Pin GPIO_PIN_7
 #define KEY_3_GPIO_Port GPIOC
 #define KEY_3_EXTI_IRQn EXTI4_15_IRQn
