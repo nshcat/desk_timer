@@ -10,18 +10,30 @@ find_package(CMSIS COMPONENTS STM32G0B1CB REQUIRED)
 find_package(HAL COMPONENTS STM32G0 REQUIRED)
 
 # This sets -g3 for debug builds, which includes DWARF GDB macros for memory mapped registers
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -feliminate-unused-debug-symbols -fdata-sections -ffunction-sections")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -feliminate-unused-debug-symbols -fdata-sections -ffunction-sections")
+
+# Disable RTTI
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions")
 
 # Enable support for C++20
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Include third party dependencies
+add_subdirectory(thirdparty/u8g2)
+
 file(GLOB_RECURSE PROJECT_SOURCES_C ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
 file(GLOB_RECURSE PROJECT_SOURCES_CXX ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx)
 
+# Add main project executable
 add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES_C} ${PROJECT_SOURCES_CXX})
+
+# Enable LTO
+set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+
 target_link_libraries(${CMAKE_PROJECT_NAME}
+    # -- STM32 HAL libraries
     CMSIS::STM32::G0B1CB
     STM32::NoSys
     HAL::STM32::G0::RCC
@@ -36,6 +48,10 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     HAL::STM32::G0::PWREx
     HAL::STM32::G0::UART
     HAL::STM32::G0::UARTEx
+    HAL::STM32::G0::DMA
+
+    # -- Thirdparty libraries
+    u8g2
 )
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/sys)

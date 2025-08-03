@@ -1,7 +1,13 @@
 ---
+BasedOnStyle: Microsoft
+IndentWidth: 2
+---
+Language:        C
+BasedOnStyle: Microsoft
+---
 Language:        Cpp
-BasedOnStyle: Google
-IndentWidth:     4
+BasedOnStyle: Microsoft
+IndentWidth:     2
 # Only used when "BreakBeforeBraces" set to "Custom"
 BraceWrapping:
   AfterCaseLabel: true
@@ -23,7 +29,7 @@ BraceWrapping:
   SplitEmptyNamespace: true
 BreakBeforeBraces: Custom
 NamespaceIndentation: All
-AccessModifierOffset: -4
+AccessModifierOffset: -2
 FixNamespaceComments: false
 ...
 
