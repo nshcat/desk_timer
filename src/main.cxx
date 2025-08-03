@@ -8,6 +8,8 @@
 #include <stm32g0xx_hal_tim.h>
 
 #include <u8g2.h>
+#include <mui.h>
+#include <mui_u8g2.h>
 
 RTC_HandleTypeDef hrtc;
 SPI_HandleTypeDef hspi3;
